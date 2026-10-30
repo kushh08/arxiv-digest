@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trading and Market Microstructure · 2026-10-29 · arXiv Daily Digest</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f5f0; --surface: #ffffff; --ink: #1c1b19; --muted: #6b675f; --line: #e4e0d6;
+    --accent: #b3261e; --accent-soft: #fbeae8; --chip: #f0ede6;
+    --good: #1f7a4d; --good-soft: #e4f3ea; --mid: #8a5a00; --mid-soft: #fbf0d9; --far: #4b4fa8; --far-soft: #e9eaf8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #141412; --surface: #1d1c1a; --ink: #ecebe6; --muted: #a29e94; --line: #2f2d29;
+      --accent: #ff8a7e; --accent-soft: #3a201d; --chip: #2a2825;
+      --good: #6fd3a0; --good-soft: #17301f; --mid: #f0c060; --mid-soft: #33290f; --far: #a9adff; --far-soft: #23244a;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.6 Inter, system-ui, sans-serif; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
+  header { border-bottom: 1px solid var(--line); background: var(--surface); }
+  header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 18px; padding-bottom: 18px; flex-wrap: wrap; }
+  .brand { font-family: Fraunces, Georgia, serif; font-weight: 650; font-size: 22px; letter-spacing: -0.01em; }
+  .brand span { color: var(--accent); }
+  .controls { display: flex; gap: 10px; flex-wrap: wrap; }
+  select, button { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; }
+  select { min-width: 0; max-width: 100%; }
+  button { cursor: pointer; background: var(--ink); color: var(--bg); border-color: var(--ink); font-weight: 500; }
+  button:disabled { opacity: .5; cursor: default; }
+
+  .hero { padding: 40px 0 8px; }
+  .hero h1 { font-family: Fraunces, Georgia, serif; font-weight: 650; font-size: clamp(28px, 5vw, 40px); line-height: 1.15; margin: 0 0 8px; letter-spacing: -0.02em; }
+  .hero p { color: var(--muted); margin: 0; max-width: 640px; }
+  .meta { color: var(--muted); font-size: 13px; margin-top: 14px; display: flex; gap: 14px; flex-wrap: wrap; }
+
+  .status { margin: 28px 0; padding: 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; display: flex; gap: 14px; align-items: center; }
+  .spinner { width: 18px; height: 18px; border: 2px solid var(--line); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.9s linear infinite; flex: none; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .status.error { border-color: var(--accent); background: var(--accent-soft); }
+
+  .paper { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 24px; margin: 18px 0; }
+  .paper-head { display: grid; grid-template-columns: auto 1fr; gap: 16px; }
+  .rank { font-family: Fraunces, Georgia, serif; font-size: 34px; line-height: 1; color: var(--accent); font-weight: 650; min-width: 36px; }
+  .paper h2 { font-family: Fraunces, Georgia, serif; font-weight: 500; font-size: 21px; line-height: 1.3; margin: 0 0 6px; }
+  .paper h2 a { color: inherit; text-decoration: none; }
+  .paper h2 a:hover { text-decoration: underline; }
+  .authors { color: var(--muted); font-size: 13px; margin-bottom: 10px; overflow-wrap: anywhere; }
+  .tldr { font-size: 16px; margin: 14px 0 4px; font-weight: 500; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+  .chip { background: var(--chip); color: var(--muted); font-size: 12px; padding: 3px 9px; border-radius: 999px; }
+  .chip.ready-now { background: var(--good-soft); color: var(--good); }
+  .chip.ready-near { background: var(--mid-soft); color: var(--mid); }
+  .chip.ready-far { background: var(--far-soft); color: var(--far); }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 28px; margin-top: 20px; }
+  @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } .paper { padding: 18px; } }
+  .section h3 { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 4px; font-weight: 600; }
+  .section p, .section ul { margin: 0; }
+  .section ul { padding-left: 18px; }
+  .practical-bar { height: 6px; background: var(--chip); border-radius: 3px; margin: 6px 0 8px; overflow: hidden; }
+  .practical-bar div { height: 100%; background: var(--accent); }
+  details { margin-top: 16px; border-top: 1px solid var(--line); padding-top: 12px; color: var(--muted); font-size: 14px; }
+  summary { cursor: pointer; }
+  .links { display: flex; gap: 14px; margin-top: 14px; font-size: 13px; }
+  .links a { color: var(--accent); text-decoration: none; font-weight: 500; }
+  .empty { text-align: center; color: var(--muted); padding: 60px 0; }
+  footer { color: var(--muted); font-size: 12px; text-align: center; padding: 40px 0; }
+.navlink { color: var(--muted); text-decoration: none; font-size: 14px; }
+.navlink:hover { color: var(--ink); }
+button.secondary { background: var(--surface); color: var(--ink); border-color: var(--line); }
+.share-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 16px; }
+.toast { font-size: 13px; color: var(--good); }
+ul.days { margin: 8px 0 0; padding-left: 18px; color: var(--muted); }
+ul.days a { color: var(--accent); text-decoration: none; }
+
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="brand">arXiv <span>Daily</span> Digest</div><div class="controls"><a class="navlink" href="../index.html">All fields &amp; days</a></div></div></header>
+<main class="wrap">
+<section class="hero">
+  <h1>Top papers in Trading and Market Microstructure</h1>
+  <p id="subtitle"></p>
+  <div class="meta"><span>2 new papers screened</span><span>2 read in full</span></div>
+</section>
+<div id="papers"></div>
+<script>
+// Shared rendering for the live app and exported/published digest pages.
+
+function esc(s) {
+  return String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+function readinessClass(r) {
+  if (r.startsWith("Usable")) return "ready-now";
+  if (r.startsWith("Near")) return "ready-near";
+  return "ready-far";
+}
+
+function paperCard(p) {
+  const s = p.summary;
+  const head = `
+    <div class="paper-head">
+      <div class="rank">${p.rank}</div>
+      <div>
+        <h2><a href="${esc(p.abs_url)}" target="_blank" rel="noopener">${esc(p.title)}</a></h2>
+        <div class="authors">${esc(p.authors)}</div>
+        ${s ? `<div class="tldr">${esc(s.tldr)}</div>` : ""}
+        <div class="chips">
+          ${s ? `<span class="chip ${readinessClass(s.practicality.readiness)}">${esc(s.practicality.readiness)}</span>` : ""}
+          ${(s?.tags || []).map((t) => `<span class="chip">${esc(t)}</span>`).join("")}
+          ${p.basis !== "full text" ? `<span class="chip">Based on ${esc(p.basis)}</span>` : ""}
+        </div>
+      </div>
+    </div>`;
+  if (!s) {
+    return `<article class="paper">${head}<p class="authors">The full breakdown couldn't be generated: ${esc(p.error)}</p>
+      <p>${esc(p.abstract)}</p>${links(p)}</article>`;
+  }
+  const pct = Math.max(0, Math.min(10, s.practicality.score)) * 10;
+  return `<article class="paper">${head}
+    <div class="grid">
+      <div class="section"><h3>Goal</h3><p>${esc(s.goal)}</p></div>
+      <div class="section"><h3>How they did it</h3><p>${esc(s.approach)}</p></div>
+      <div class="section"><h3>Key results</h3><ul>${s.key_results.map((r) => `<li>${esc(r)}</li>`).join("")}</ul></div>
+      <div class="section"><h3>Implications</h3><p>${esc(s.implications)}</p></div>
+      <div class="section"><h3>Real-world practicality · ${s.practicality.score}/10</h3>
+        <div class="practical-bar"><div style="width:${pct}%"></div></div>
+        <p>${esc(s.practicality.explanation)}</p></div>
+      <div class="section"><h3>Limitations</h3><p>${esc(s.limitations)}</p></div>
+    </div>
+    <details><summary>Why it made the top 10</summary><p>${esc(p.why_selected)}</p></details>
+    ${links(p)}
+  </article>`;
+}
+
+function links(p) {
+  return `<div class="links"><a href="${esc(p.abs_url)}" target="_blank" rel="noopener">Abstract</a>
+    <a href="${esc(p.pdf_url)}" target="_blank" rel="noopener">PDF</a></div>`;
+}
+
+function fmtDate(iso) {
+  return new Date(iso + "T12:00:00").toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric", year: "numeric" });
+}
+
+const PAPERS = [{"id": "2610.38442", "title": "Calibration of Passive Market Impact with a Queue-Sensitive Propagator Model", "authors": "Yadh Hafsi, Fabrizio Lillo, Gr\u00e9goire Szymanski", "abstract": "We develop a framework for calibrating passive market impact, defined as the price response to liquidity-providing limit orders, in contrast to the impact of liquidity-consuming market orders. We build on the model of Ouazzani Chahdi, Rosenbaum, and Szymanski (arxiv:2412.07461), which combines Hawkes-driven market-order flow with queue-reactive limit-order and cancellation dynamics. Within this model, we show that the price decomposes into a universal propagator term driven by signed order-flow imbalance and a state-dependent correction that captures the dependence of price sensitivity on volume at the best quotes. This decomposition links limit-order-book microstructure to standard propagator models and yields a regression on two observable signals: the propagator signal and the queue-weighted order-flow imbalance. We calibrate the model on high-frequency order-book data and find that the passive-impact term explains substantial variation in prices beyond the classical propagator, improving both model fit and the accuracy of predicted impact curves.", "categories": ["q-fin.TR", "math.PR", "q-fin.MF", "q-fin.ST"], "announce_type": "new", "abs_url": "https://arxiv.org/abs/2610.38442", "pdf_url": "https://arxiv.org/pdf/2610.38442", "score": 64, "why_selected": "A principled, calibrated decomposition of passive market impact that ties queue-reactive LOB models to propagator models, with clear relevance for execution practice.", "basis": "full text", "summary": {"tldr": "The authors split price impact into a standard Hawkes propagator plus a correction for how full the queues are. On CME futures, thicker queues damp trade impact, and posting liquidity moves prices about 22\u00d7 less than trading the same volume aggressively.", "goal": "Standard propagator models treat every market order as moving the price by the same amount, no matter how much liquidity is resting in the book. They also say nothing about the price effect of passive limit orders. The paper sets out to measure \"passive impact\": the price effect that comes from adding resting liquidity, which changes how much later market orders move the price.", "approach": "The paper builds on the Ouazzani Chahdi\u2013Rosenbaum\u2013Szymanski model. In that model, market orders arrive as a Hawkes (self-exciting) process, limit orders and cancellations arrive at queue-reactive Poisson rates, and the price is the expected long-run sum of trades, each weighted by a sensitivity \u03ba(q) that depends on the queue it hits. The authors prove the price splits into three parts: (1) the classical Hawkes propagator scaled by the average sensitivity, (2) an observable queue-weighted order-flow imbalance, and (3) an unobserved \"anticipation\" term. That turns calibration into a two-step process. First they fit the Hawkes kernels and the queue intensities from message data, in 15-minute bins. Then they regress weighted-mid-price changes on the propagator signal and the queue-weighted signal, using rolling windows (16 days to fit, the next day to test) at an out-of-sample-chosen horizon (about 212 s for ES). The data are CME E-mini S&P 500 (ES) messages for 2025, with checks on NQ, RTY and YM (2023\u201325) and the Treasury futures ZN, ZB, ZF and TN (2025). Passive-impact curves come from shared-noise Monte Carlo counterfactuals that add posted limit orders to the book.", "key_results": ["Queue slope in ES 2025: \u03ba1 = \u22128.1e-6 (standard error 1.7e-6). It is negative in every 20-day rolling window and every 15-minute intraday bin, and it keeps its sign with the plain mid-price (t from \u22125.9 to \u221211.4), so it is not just a side effect of using the weighted mid.", "Out-of-sample R\u00b2 for ES 2025: adding the queue term lifts it only modestly, from 0.422 to 0.437 (0.458 to 0.469 with forecast clipping). A 102-signal full-book-state ridge model reaches 0.603. Fixed on ES 2025 and applied unchanged, that full-book model beats the propagator in all 16 instrument-year cells, by 0.06 to 0.19 R\u00b2 (Newey\u2013West t between 7 and 13).", "Simulated passive impact (ES): posting 100 AES of sell liquidity (AES = average best-quote insertion, about 1.22 contracts) over 50 s moves the weighted mid by about 1.5e-2 index points, roughly 6% of a tick. The effect is essentially permanent, grows linearly with volume (log-log slope 0.98, not square-root), and is 22\u00d7 smaller than executing the same volume with market orders.", "Impact depends on liquidity: in thin-book sessions the immediate impact of a trade is about 2.3\u00d7 that in thick-book sessions, and passive impact is about 2.2\u00d7 larger. The passive-impact numbers are very sensitive to the calibrated queue mean-reversion rate; under alternative calibrations the peak at 100 AES falls from 1.5e-2 to 1.0e-2 or 3e-4 index points."], "implications": "The paper gives a tractable bridge between queue-reactive order-book models and the propagator models already used in execution and transaction-cost analysis: the classical propagator is the average case, and book state is a measurable correction. For execution desks, it suggests posting limit orders carries a small, roughly linear, permanent price cost that is far below the cost of crossing the spread. The authors stress, however, that this estimate depends strongly on how queue dynamics are calibrated.", "practicality": {"readiness": "Near-term (1-2 years)", "score": 6, "explanation": "Quant execution and TCA teams that have message-level futures data could build the queue-weighted signal and run the regression now. On its own, though, the affine queue term adds only about 1.5 points of R\u00b2. The passive-impact cost numbers are not ready to use as given: they come from simulation, ignore whether orders get filled, assume market orders do not react to queue size, and change by more than an order of magnitude depending on the mean-reversion calibration."}, "limitations": "The model assumes market-order arrival rates do not depend on queue size, which the authors' own data contradict. It ignores direct quote changes from passive orders and treats buy and sell flow as independent Hawkes processes, although they are strongly correlated (0.76 contemporaneously). The passive-impact curves count posted volume rather than filled volume, and their size depends heavily on the queue mean-reversion calibration. The sample covers only liquid, large-tick futures in regular sessions, excluding FOMC days and halts.", "tags": ["market impact", "propagator models", "Hawkes processes", "limit order book", "queue-reactive models"]}, "error": null, "rank": 1}, {"id": "2610.39458", "title": "Early-Buyer Groups and Fast-Wallet Teams on a Bonding-Curve Launchpad: A Prospective Measurement Study of pump.fun on Solana", "authors": "Fail Gafarov", "abstract": "We study coordinated groups of wallets on a bonding-curve launchpad (pump.fun on Solana), using a complete record of 200\\,443 token launches, 15\\,854\\,121 curve trades and 51\\,025\\,958 SOL transfers over 88.3 hours. A prospective, multi-channel discovery procedure (co-buying, shared funding, joint signing, transfers, consolidation) yields 23\\,710 wallet groups. Without ground-truth labels we validate them by out-of-sample link prediction, independent non-trading links and a comparison with naive co-buy clustering at equal numbers of flagged tokens: raw clustering collapses into one giant component, yet it ranks tokens at least as well as the groups, so the value of the structure is descriptive. Group activity is highly concentrated and splits into serial creators and long-lived rings of early buyers. Known members buy earlier than other buyers of the same token and extract more cash than an activity-matched placebo set, while late buyers' net cash flow is negative; tokens with members show a pump-like price path, but the contrast vanishes when controls are restricted to comparable tokens, so we report it as an association. A follower entering at the earliest group signal loses money out of sample in all 32 configurations and does no better than random entry. A few pools of tens to over a hundred fast wallets are associated with a two- to four-fold higher chance of reaching 20 SOL, also within creators, with a smaller excess at 60 SOL and none for graduation; on a final hold-out the team rules keep a precision of about one half to three quarters, yet many signals arrive when the curve already holds 20 SOL, one team supplies most of them, and they add no information beyond early curve state. We also document evaluation errors that turn the same data into apparent profit.", "categories": ["physics.soc-ph", "cs.SI", "q-fin.TR"], "announce_type": "new", "abs_url": "https://arxiv.org/abs/2610.39458", "pdf_url": "https://arxiv.org/pdf/2610.39458", "score": 58, "why_selected": "A large, careful measurement study of coordinated wallets on pump.fun that reports honest negative results, though its scope is a niche venue and an 88-hour window.", "basis": "truncated full text", "summary": {"tldr": "The study finds coordinated wallet groups and fast-buying teams on pump.fun in an 88-hour window, but copying them loses money after costs, and their signals add nothing beyond early curve state.", "goal": "Commentators often say coordinated wallets drive prices on memecoin launchpads like pump.fun, but nobody had measured this across a whole population of launches. The paper asks four things: can such groups be found from public on-chain data without ground-truth labels, how do they behave, who gains and who loses, and can an outside trader profit from spotting them?", "approach": "The author built a block-by-block Solana collector and recorded every pump.fun event over 88.3 hours: 200,443 launches, 15.9M bonding-curve trades and 51M SOL transfers. Wallet groups were found prospectively, meaning each decision uses only information available at that moment. Five kinds of evidence were combined (co-buying, shared funding, joint signing, transfers, consolidation), yielding 23,710 groups. With no labels available, the groups were validated by out-of-sample link prediction, by checking non-trading links, and by comparing against naive co-buy clustering at equal numbers of flagged tokens. Price paths and cash flows were compared against permutation nulls, weighted and matched controls, and within-creator contrasts. A copy-trading follower was simulated against the exact recorded curve reserves, with fees, slippage and 1-5 s latency. Separately, fast-wallet teams (wallets that repeatedly buy within 5 s of launch) were identified, and their signal rules were frozen and then evaluated once on a final hold-out block.", "key_results": ["Group members buy about 4.3 s earlier than other early buyers of the same token. Against a placebo set matched on timing and volume, they take out about 0.17 SOL more cash per token, while late buyers average about -2.3 SOL in net cash flow. Activity is highly concentrated: Gini 0.86, with the top 1% of groups behind 43% of attributed tokens.", "A follower who enters at the earliest group signal loses money out of sample in all 32 cost and latency settings: -4% to -11% per trade, no better than entering random tokens. Learned entry-ranking models also never earn a positive out-of-sample return.", "Naive co-buy clustering lumps 94% of linked wallets into one giant component, yet it ranks tokens at least as well as the discovered groups. Tokens with group members show a pump-like price path (8.8% double in price after the first minute vs 2.8% for weighted controls), but the gap disappears when the comparison is limited to comparable controls.", "A few teams of tens to 126 wallets are linked to 2-4x higher odds of a token reaching 20 SOL, including within the same creator, but have no effect on graduation. On the final hold-out their rules flag tokens with about 50-73% precision, but 26-40% of signals fire after the token has already reached 20 SOL, one team supplies 62-79% of signals, and the team features add nothing to a model using early curve state (AUC 0.94 either way)."], "implications": "Coordinated early-buyer pools are real and they extract cash from late buyers, but by the time they are visible on-chain their buying is already in the price. Platforms that want to curb this would act at creation and in the first seconds (rate limits, delays, visibility of early buys) rather than by detecting groups after the fact. For researchers, the paper documents evaluation pitfalls that turn this same data into apparent profit: leaving the trader's own position out of the exit pricing, a label leak that showed a spurious +300%, signals that fire after the event they claim to predict, and comparing methods at unequal coverage.", "practicality": {"readiness": "Usable now", "score": 5, "explanation": "The collector, the group discovery method and the evaluation checklist could be used now by platform integrity teams, regulators and researchers studying launchpad manipulation, and a replication package with hashed addresses is described. For traders the main practical result is a warning: following detected groups loses money. That conclusion only covers one-second resolution and the tested cost settings, so bundle-level or colocated execution is untested."}, "limitations": "The data cover a single 88-hour window in one market regime, with no ground-truth ownership labels. The team findings are exploratory, rest heavily on one dominant 126-wallet team, and the price-path and team effects are associations, not causal effects. Latency below one second, bundles and priority tips are not modelled.", "tags": ["pump.fun", "Solana memecoins", "coordinated trading", "bonding curves", "backtest pitfalls"]}, "error": null, "rank": 2}];
+document.getElementById("subtitle").textContent = "arXiv announcement of " + fmtDate("2026-10-29");
+document.getElementById("papers").innerHTML = PAPERS.map(paperCard).join("");
+</script>
+</main>
+<footer>Summaries are generated by Claude and can contain mistakes. Always check the paper before relying on a claim.</footer>
+</body>
+</html>
